@@ -4,9 +4,9 @@ Asynchronous telegram bot for tracking movie release.
 
 ## What's done
 
-- [lesson 2](#lesson-2)
+- [lesson 3](#lesson-3)
 
-## Lesson 2
+## Lesson 3
 
 - Создан скелет приложения:
   - интерфесы для всех классов приложения
