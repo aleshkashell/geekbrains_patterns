@@ -2,6 +2,14 @@
 
 Asynchronous telegram bot for tracking movie release.
 
+## How to run
+
+```bash
+TELEGRAM_API_TOKEN="yout token"
+pip install requirements.txt
+python3 runner.py
+```
+
 ## What's done
 
 - [lesson 3](#lesson-3)
