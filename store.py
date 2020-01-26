@@ -13,8 +13,8 @@ class Store(StoreInterface):
     async def get_users(self, is_active=True, telegram_id=None):
         return await self.users.get_all(is_active=is_active, telegram_id=telegram_id)
 
-    async def get_movies(self, is_active=True):
-        pass
+    async def get_movies(self, is_active=True, telegram_id=None):
+        return await self.movies.get_all(is_active=is_active, telegram_id=telegram_id)
 
     async def get_releases_date(self):
         pass

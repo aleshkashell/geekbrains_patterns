@@ -113,8 +113,20 @@ class Movies(DatabaseInterface):
     async def get(self):
         pass
 
-    async def get_all(self):
-        pass
+    async def get_all(self, is_active=True, telegram_id=None):
+        projection_ = {
+            "_id": False  # don't return the _id
+        }
+        filter_ = {
+            "is_active": is_active
+        }
+        if telegram_id:
+            filter_['watchers'] = {
+                "$all": [telegram_id]
+            }
+        cursor = self.collection.find(filter=filter_, projection=projection_)
+        items = await cursor.to_list(length=None)
+        return items
 
     async def activate(self):
         pass

@@ -27,11 +27,22 @@ class TgBot(TgBotInterface):
     def create_handlers(self):
         self.dp.register_message_handler(callback=self.handle_welcome, commands=['start'])
         self.dp.register_message_handler(callback=self.handle_help, commands=['help'])
+        self.dp.register_message_handler(callback=self.handle_list, commands=['list'])
         self.dp.register_message_handler(callback=self.cats, regexp='(^cat[s]?$|puss)')
         self.dp.register_message_handler(callback=self.handle_message)
 
     def run(self):
         executor.start_polling(self.dp, skip_updates=True)
+
+    async def handle_help(self, message: types.Message):
+        await message.answer(self.help_message)
+
+    async def handle_list(self, message: types.Message):
+        qmessage = {
+            'type': 'list',
+            'content': message.to_python()
+        }
+        await self.queue.put(qmessage)
 
     async def handle_message(self, message: types.Message):
         qmessage = {
@@ -39,10 +50,6 @@ class TgBot(TgBotInterface):
             'content': message.to_python()
         }
         await self.queue.put(qmessage)
-        await message.answer(message.text)
-
-    async def handle_help(self, message: types.Message):
-        await message.answer(self.help_message)
 
     async def handle_welcome(self, message: types.Message):
         qmessage = {

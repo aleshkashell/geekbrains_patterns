@@ -26,6 +26,13 @@ class Runner(RunnerInterface):
                     self.log.error(f"Get incorrect object from tgbot: {item}")
                 if item['type'] == 'start':
                     await self.store.create_or_update_user(item['content']['from'])
+                if item['type'] == 'list':
+                    watcher = item['content']['from']['id']
+                    movies = await self.store.get_movies(telegram_id=watcher)
+                    results = '\n'.join([i['title'] for i in movies])
+                    answer = f"You are waiting for:\n" \
+                             f"{results}"
+                    await self.bot.send_message(watcher, answer)
                 elif item['type'] == 'message':
                     movie = item['content']['text'].strip()
                     watcher = item['content']['from']['id']
