@@ -5,7 +5,7 @@ from store import Store
 from tgbot import TgBot
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
 class Runner(RunnerInterface):
