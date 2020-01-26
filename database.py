@@ -33,8 +33,7 @@ class Users(DatabaseInterface):
             }
 
         }
-        result = await self.collection.update_one(filter_, update_, upsert=True)
-        logger.info(f'Create user: {result}')
+        await self.collection.update_one(filter_, update_, upsert=True)
 
     async def remove(self, id):
         filter_ = {
