@@ -8,8 +8,12 @@ logger = logging.getLogger('Database')
 
 
 class Users(DatabaseInterface):
-    def __init__(self):
-        client = motor.motor_asyncio.AsyncIOMotorClient()
+    def __init__(self, user=None, password=None, server="localhost", port=27017):
+        if user and password:
+            uri = f"mongodb://{user}:{password}@{server}:{port}/"
+        else:
+            uri = f"mongodb://{server}:{port}/"
+        client = motor.motor_asyncio.AsyncIOMotorClient(uri)
         db = client.users_database
         self.collection = db.users_collection
 
@@ -45,7 +49,7 @@ class Users(DatabaseInterface):
         projection_ = {
             "_id": False  # don't return the _id
         }
-        document = await self.collection.find(filter=filter_, projection=projection_)
+        document = await self.collection.find_one(filter=filter_, projection=projection_)
         logger.debug(f'Found: {document}')
         return document
 
