@@ -5,109 +5,109 @@ from aiogram import types
 
 class RunnerInterface(ABC):
     @abstractmethod
-    async def process_messages(self):
+    async def process_messages(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def prepare(self):
+    def prepare(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def run(self):
+    def run(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def search_digital(self):
+    def search_digital(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def search_bd(self):
+    def search_bd(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def search_torrent(self):
+    def search_torrent(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def background_updater(self):
+    def background_updater(self, *args, **kwargs):
         pass
 
 
 class TorrentSearcherInterface(ABC):
     @abstractmethod
-    def search_word(self):
+    def search_word(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def search_exact(self):
+    def search_exact(self, *args, **kwargs):
         pass
 
 
 class ReleaseDateInterface(ABC):
     @abstractmethod
-    def itunes(self):
+    def itunes(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def imdb(self):
+    def imdb(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def kinopoisk(self):
+    def kinopoisk(self, *args, **kwargs):
         pass
 
 
 class StoreInterface(ABC):
     @abstractmethod
-    def create_or_update_user(self):
+    def create_or_update_user(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def get_releases_date(self):
+    def get_releases_date(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def get_releases_today(self):
+    def get_releases_today(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def create_or_update_movie(self):
+    def create_or_update_movie(self, *args, **kwargs):
         pass
 
 
 class DatabaseInterface(ABC):
     @abstractmethod
-    def create(self):
+    async def create_or_update(self, *args, **kwargs):
+        pass
+
+    # @abstractmethod
+    # async def update(self, *args, **kwargs):
+    #     pass
+
+    @abstractmethod
+    async def remove(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def update(self):
+    async def get(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def remove(self):
+    async def activate(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def get(self):
-        pass
-
-    @abstractmethod
-    def activate(self):
-        pass
-
-    @abstractmethod
-    def deactivate(self):
+    async def deactivate(self, *args, **kwargs):
         pass
 
 
 class TgBotInterface(ABC):
     @abstractmethod
-    def create_handlers(self):
+    def create_handlers(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def run(self):
+    def run(self, *args, **kwargs):
         """Запуск получения сообщений и asyncio цикла"""
         pass
 
@@ -121,10 +121,10 @@ class TgBotInterface(ABC):
         pass
 
     @abstractmethod
-    async def send_message(self):
+    async def send_message(self, *args, **kwargs):
         """Отправка сообщения"""
         pass
 
     @abstractmethod
-    def add_to_queue(self):
+    def add_to_queue(self, *args, **kwargs):
         pass
