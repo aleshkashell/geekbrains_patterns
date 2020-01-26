@@ -26,6 +26,11 @@ class Runner(RunnerInterface):
                     await self.store.create_or_update_user(item['content']['from'])
                 elif item['type'] == 'message':
                     print(item['content'])
+                    movie = item['content']['text']
+                    watcher = item['content']['from']['id']
+                    await self.store.create_or_update_movie(movie, watcher)
+                    answer = f"Title '{movie}' was added"
+                    await self.bot.send_message(watcher, answer)
 
     def prepare(self):
         self.loop.create_task(self.process_messages())

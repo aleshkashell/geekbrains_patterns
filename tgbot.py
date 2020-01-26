@@ -11,18 +11,19 @@ class TgBot(TgBotInterface):
         if not self.API_TOKEN:
             print("Error read token")
             exit(1)
-        bot = Bot(token=self.API_TOKEN)
-        self.dp = Dispatcher(bot)
+        self.bot = Bot(token=self.API_TOKEN)
+        self.dp = Dispatcher(self.bot)
         self.create_handlers()
         self.welcome_message = f'Hi! This is a bot for lookup movie release.\n' \
                                f'You can use command /help for additional information.'
-        self.help_message = f''
+        self.help_message = f"Just text some film title and when it will be released I'll notify you in telegram."
 
     async def add_to_queue(self):
         pass
 
     def create_handlers(self):
-        self.dp.register_message_handler(callback=self.handle_welcome, commands=['start', 'help'])
+        self.dp.register_message_handler(callback=self.handle_welcome, commands=['start'])
+        self.dp.register_message_handler(callback=self.handle_help, commands=['help'])
         self.dp.register_message_handler(callback=self.cats, regexp='(^cat[s]?$|puss)')
         self.dp.register_message_handler(callback=self.handle_message)
 
@@ -30,8 +31,15 @@ class TgBot(TgBotInterface):
         executor.start_polling(self.dp, skip_updates=True)
 
     async def handle_message(self, message: types.Message):
-        await self.queue.put(message)
+        qmessage = {
+            'type': 'message',
+            'content': message.to_python()
+        }
+        await self.queue.put(qmessage)
         await message.answer(message.text)
+
+    async def handle_help(self, message: types.Message):
+        await message.answer(self.help_message)
 
     async def handle_welcome(self, message: types.Message):
         qmessage = {
@@ -41,8 +49,8 @@ class TgBot(TgBotInterface):
         await self.queue.put(qmessage)
         await message.reply(self.welcome_message)
 
-    async def send_message(self):
-        pass
+    async def send_message(self, user_id, message):
+        await self.bot.send_message(user_id, message)
 
     async def send_welcome(self, message: types.Message):
         await self.queue.put(message)

@@ -22,5 +22,5 @@ class Store(StoreInterface):
     async def get_releases_today(self):
         pass
 
-    async def create_or_update_movie(self):
-        pass
+    async def create_or_update_movie(self, movie, watcher):
+        await self.movies.create_or_update(movie, watcher)

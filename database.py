@@ -71,12 +71,36 @@ class Users(DatabaseInterface):
     
 
 class Movies(DatabaseInterface):
-    def __init__(self):
-        super().__init__()
-        logger.debug('Users db was created')
+    def __init__(self, user=None, password=None, server="localhost", port=27017):
+        if user and password:
+            uri = f"mongodb://{user}:{password}@{server}:{port}/"
+        else:
+            uri = f"mongodb://{server}:{port}/"
+        client = motor.motor_asyncio.AsyncIOMotorClient(uri)
+        db = client.movies_database
+        self.collection = db.movies_collection
 
-    async def create_or_update(self):
-        pass
+    async def create_or_update(self, movie, watcher=None, is_active=True):
+        filter_ = {
+            "title": movie
+        }
+        record = {
+            "title": movie,
+            "is_active": is_active
+        }
+        update_ = {
+            "$set": record,
+            "$push": {"watchers": watcher},
+            "$currentDate": {
+                "updatedAt": True  # set field updatedAt to current date automagically. Good practice ;)
+            },
+            "$setOnInsert": {
+                "createdAt": datetime.utcnow()
+                # set field createdAt to current date automagically ONLY IF it's a new record
+            }
+
+        }
+        await self.collection.update_one(filter_, update_, upsert=True)
 
     # def update(self):
     #     pass
