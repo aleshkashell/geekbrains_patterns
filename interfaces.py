@@ -63,6 +63,10 @@ class StoreInterface(ABC):
         pass
 
     @abstractmethod
+    async def get_movies(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
     async def get_users(self, *args, **kwargs):
         pass
 
