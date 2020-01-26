@@ -87,6 +87,9 @@ class Movies(DatabaseInterface):
     async def get(self):
         pass
 
+    async def get_all(self):
+        pass
+
     async def activate(self):
         pass
 

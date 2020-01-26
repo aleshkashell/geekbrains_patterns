@@ -14,6 +14,9 @@ class TgBot(TgBotInterface):
         bot = Bot(token=self.API_TOKEN)
         self.dp = Dispatcher(bot)
         self.create_handlers()
+        self.welcome_message = f'Hi! This is a bot for lookup movie release.\n' \
+                               f'You can use command /help for additional information.'
+        self.help_message = f''
 
     async def add_to_queue(self):
         pass
@@ -31,9 +34,12 @@ class TgBot(TgBotInterface):
         await message.answer(message.text)
 
     async def handle_welcome(self, message: types.Message):
-        await self.queue.put(message)
-        print(dir(message))
-        await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+        qmessage = {
+            'type': 'start',
+            'content': message.to_python()
+        }
+        await self.queue.put(qmessage)
+        await message.reply(self.welcome_message)
 
     async def send_message(self):
         pass

@@ -22,6 +22,10 @@ class Runner(RunnerInterface):
             item = await self.queue.get()
             if item is not None:
                 self.log.info(item)
+                if item['type'] == 'start':
+                    await self.store.create_or_update_user(item['content']['from'])
+                elif item['type'] == 'message':
+                    print(item['content'])
 
     def prepare(self):
         self.loop.create_task(self.process_messages())
