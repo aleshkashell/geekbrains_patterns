@@ -52,13 +52,15 @@ class Users(DatabaseInterface):
         logger.debug(f'Found: {document}')
         return document
 
-    async def get_all(self, is_active=True):
+    async def get_all(self, is_active=True, telegram_id=None):
         projection_ = {
             "_id": False  # don't return the _id
         }
         filter_ = {
             "is_active": is_active
         }
+        if telegram_id:
+            filter_['telegram_id'] = telegram_id
         cursor = self.collection.find(filter=filter_, projection=projection_)
         items = await cursor.to_list(length=None)
         return items
@@ -90,7 +92,7 @@ class Movies(DatabaseInterface):
         }
         update_ = {
             "$set": record,
-            "$push": {"watchers": watcher},
+            "$addToSet": {"watchers": watcher},
             "$currentDate": {
                 "updatedAt": True  # set field updatedAt to current date automagically. Good practice ;)
             },

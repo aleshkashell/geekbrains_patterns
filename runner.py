@@ -22,15 +22,21 @@ class Runner(RunnerInterface):
             item = await self.queue.get()
             if item is not None:
                 self.log.info(item)
+                if not isinstance(item, dict) or 'type' not in item.keys():
+                    self.log.error(f"Get incorrect object from tgbot: {item}")
                 if item['type'] == 'start':
                     await self.store.create_or_update_user(item['content']['from'])
                 elif item['type'] == 'message':
-                    print(item['content'])
                     movie = item['content']['text']
                     watcher = item['content']['from']['id']
-                    await self.store.create_or_update_movie(movie, watcher)
-                    answer = f"Title '{movie}' was added"
+                    if await self.store.get_users(telegram_id=watcher):
+                        await self.store.create_or_update_movie(movie, watcher)
+                        answer = f"Title '{movie}' was added"
+                    else:
+                        answer = f'You need /start chatting with bot before make requests.'
                     await self.bot.send_message(watcher, answer)
+                else:
+                    self.log.error(f"Unknown type from item: {item}")
 
     def prepare(self):
         self.loop.create_task(self.process_messages())
