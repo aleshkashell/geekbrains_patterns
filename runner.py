@@ -27,13 +27,16 @@ class Runner(RunnerInterface):
                 if item['type'] == 'start':
                     await self.store.create_or_update_user(item['content']['from'])
                 elif item['type'] == 'message':
-                    movie = item['content']['text']
+                    movie = item['content']['text'].strip()
                     watcher = item['content']['from']['id']
-                    if await self.store.get_users(telegram_id=watcher):
-                        await self.store.create_or_update_movie(movie, watcher)
-                        answer = f"Title '{movie}' was added"
+                    if movie.startswith('/'):
+                        answer = f"Incorrect command. Use /help for additional information."
                     else:
-                        answer = f'You need /start chatting with bot before make requests.'
+                        if await self.store.get_users(telegram_id=watcher):
+                            await self.store.create_or_update_movie(movie, watcher)
+                            answer = f"Title '{movie}' was added"
+                        else:
+                            answer = f'You need /start chatting with bot before make requests.'
                     await self.bot.send_message(watcher, answer)
                 else:
                     self.log.error(f"Unknown type from item: {item}")

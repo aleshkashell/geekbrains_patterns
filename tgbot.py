@@ -16,7 +16,10 @@ class TgBot(TgBotInterface):
         self.create_handlers()
         self.welcome_message = f'Hi! This is a bot for lookup movie release.\n' \
                                f'You can use command /help for additional information.'
-        self.help_message = f"Just text some film title and when it will be released I'll notify you in telegram."
+        self.help_message = f"Just text some film title and when it will be released I'll notify you in telegram.\n" \
+                            f"For view your active searches use /list\n" \
+                            f"If you don't want check any title text me /ignore title_name\n" \
+                            f"If you want unsubscribe yourself from bot use command /deactivate"
 
     async def add_to_queue(self):
         pass
