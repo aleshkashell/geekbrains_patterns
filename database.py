@@ -52,6 +52,14 @@ class Users(DatabaseInterface):
         logger.debug(f'Found: {document}')
         return document
 
+    async def get_all(self):
+        projection_ = {
+            "_id": False  # don't return the _id
+        }
+        cursor = self.collection.find(projection=projection_)
+        items = await cursor.to_list(length=None)
+        return items
+
     async def activate(self, user):
         await self.create_or_update(user, True)
 

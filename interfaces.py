@@ -59,19 +59,23 @@ class ReleaseDateInterface(ABC):
 
 class StoreInterface(ABC):
     @abstractmethod
-    def create_or_update_user(self, *args, **kwargs):
+    async def create_or_update_user(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def get_releases_date(self, *args, **kwargs):
+    async def get_users(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def get_releases_today(self, *args, **kwargs):
+    async def get_releases_date(self, *args, **kwargs):
         pass
 
     @abstractmethod
-    def create_or_update_movie(self, *args, **kwargs):
+    async def get_releases_today(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    async def create_or_update_movie(self, *args, **kwargs):
         pass
 
 
@@ -80,16 +84,16 @@ class DatabaseInterface(ABC):
     async def create_or_update(self, *args, **kwargs):
         pass
 
-    # @abstractmethod
-    # async def update(self, *args, **kwargs):
-    #     pass
-
     @abstractmethod
     async def remove(self, *args, **kwargs):
         pass
 
     @abstractmethod
     async def get(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    async def get_all(self, *args, **kwargs):
         pass
 
     @abstractmethod
