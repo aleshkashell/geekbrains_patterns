@@ -5,7 +5,7 @@ from store import Store
 from tgbot import TgBot
 
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Runner(RunnerInterface):
@@ -26,7 +26,16 @@ class Runner(RunnerInterface):
                     self.log.error(f"Get incorrect object from tgbot: {item}")
                 if item['type'] == 'start':
                     await self.store.create_or_update_user(item['content']['from'])
-                if item['type'] == 'list':
+                elif item['type'] == 'deactivate':
+                    await self.store.create_or_update_user(item['content']['from'], is_active=False)
+                elif item['type'] == 'ignore':
+                    watcher = item['content']['from']['id']
+                    movie = item['content']['text'][8:].strip()
+                    self.log.debug(f"User {watcher} trying ignore: {movie}")
+                    await self.store.create_or_update_movie(movie=movie, watcher=watcher, deactivate=True)
+                    answer = f"You are unsubscribed from '{movie}' search."
+                    await self.bot.send_message(watcher, answer)
+                elif item['type'] == 'list':
                     watcher = item['content']['from']['id']
                     movies = await self.store.get_movies(telegram_id=watcher)
                     results = '\n'.join([i['title'] for i in movies])
@@ -40,7 +49,7 @@ class Runner(RunnerInterface):
                         answer = f"Incorrect command. Use /help for additional information."
                     else:
                         if await self.store.get_users(telegram_id=watcher):
-                            await self.store.create_or_update_movie(movie, watcher)
+                            await self.store.create_or_update_movie(movie=movie, watcher=watcher)
                             answer = f"Title '{movie}' was added"
                         else:
                             answer = f'You need /start chatting with bot before make requests.'

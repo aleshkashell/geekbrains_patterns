@@ -21,12 +21,18 @@ class TgBot(TgBotInterface):
                             f"If you don't want check any title text me /ignore title_name\n" \
                             f"If you want unsubscribe yourself from bot use command /deactivate"
 
-    async def add_to_queue(self):
-        pass
+    async def add_to_queue(self, type, message):
+        request = {
+            'type': type,
+            'content': message.to_python()
+        }
+        await self.queue.put(request)
 
     def create_handlers(self):
         self.dp.register_message_handler(callback=self.handle_welcome, commands=['start'])
+        self.dp.register_message_handler(callback=self.handle_deactivate, commands=['deactivate'])
         self.dp.register_message_handler(callback=self.handle_help, commands=['help'])
+        self.dp.register_message_handler(callback=self.handle_ignore, commands=['ignore'])
         self.dp.register_message_handler(callback=self.handle_list, commands=['list'])
         self.dp.register_message_handler(callback=self.cats, regexp='(^cat[s]?$|puss)')
         self.dp.register_message_handler(callback=self.handle_message)
@@ -34,38 +40,27 @@ class TgBot(TgBotInterface):
     def run(self):
         executor.start_polling(self.dp, skip_updates=True)
 
+    async def handle_deactivate(self, message: types.Message):
+        await self.add_to_queue('deactivate', message)
+
     async def handle_help(self, message: types.Message):
         await message.answer(self.help_message)
 
+    async def handle_ignore(self, message: types.Message):
+        await self.add_to_queue('ignore', message)
+
     async def handle_list(self, message: types.Message):
-        qmessage = {
-            'type': 'list',
-            'content': message.to_python()
-        }
-        await self.queue.put(qmessage)
+        await self.add_to_queue('list', message)
 
     async def handle_message(self, message: types.Message):
-        qmessage = {
-            'type': 'message',
-            'content': message.to_python()
-        }
-        await self.queue.put(qmessage)
+        await self.add_to_queue('message', message)
 
     async def handle_welcome(self, message: types.Message):
-        qmessage = {
-            'type': 'start',
-            'content': message.to_python()
-        }
-        await self.queue.put(qmessage)
+        await self.add_to_queue('start', message)
         await message.reply(self.welcome_message)
 
     async def send_message(self, user_id, message):
         await self.bot.send_message(user_id, message)
-
-    async def send_welcome(self, message: types.Message):
-        await self.queue.put(message)
-        print(dir(message))
-        await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
 
     async def cats(self, message: types.Message):
         with open('data/cats.jpg', 'rb') as photo:

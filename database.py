@@ -131,5 +131,13 @@ class Movies(DatabaseInterface):
     async def activate(self):
         pass
 
-    async def deactivate(self):
-        pass
+    async def deactivate(self, movie, watcher):
+        filter_ = {
+            "title": movie
+        }
+        update_ = {
+            "$pull": {
+                "watchers": watcher
+            }
+        }
+        await self.collection.update_one(filter_, update_)
