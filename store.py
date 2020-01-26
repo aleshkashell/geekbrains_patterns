@@ -4,17 +4,23 @@ from database_factory import DatabaseFactory
 
 class Store(StoreInterface):
     def __init__(self):
-        users = DatabaseFactory.create_database('Users')
-        movies = DatabaseFactory.create_database('Movies')
+        self.users = DatabaseFactory.create_database('Users')
+        self.movies = DatabaseFactory.create_database('Movies')
 
-    def create_or_update_user(self):
+    async def create_or_update_user(self, user):
+        await self.users.create_or_update(user)
+
+    async def get_users(self, is_active=True):
+        await self.users.get_all(is_active)
+
+    async def get_movies(self, is_active=True):
         pass
 
-    def get_releases_date(self):
+    async def get_releases_date(self):
         pass
 
-    def get_releases_today(self):
+    async def get_releases_today(self):
         pass
 
-    def create_or_update_movie(self):
+    async def create_or_update_movie(self):
         pass

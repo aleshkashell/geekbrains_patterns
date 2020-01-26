@@ -52,11 +52,14 @@ class Users(DatabaseInterface):
         logger.debug(f'Found: {document}')
         return document
 
-    async def get_all(self):
+    async def get_all(self, is_active=True):
         projection_ = {
             "_id": False  # don't return the _id
         }
-        cursor = self.collection.find(projection=projection_)
+        filter_ = {
+            "is_active": is_active
+        }
+        cursor = self.collection.find(filter=filter_, projection=projection_)
         items = await cursor.to_list(length=None)
         return items
 
