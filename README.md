@@ -4,6 +4,8 @@ Asynchronous telegram bot for tracking movie release.
 
 ## How to run
 
+It requires mongodb on the same host, same port.
+
 ```bash
 TELEGRAM_API_TOKEN="yout token"
 pip install requirements.txt
