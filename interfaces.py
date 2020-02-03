@@ -136,3 +136,13 @@ class TgBotInterface(ABC):
     @abstractmethod
     def add_to_queue(self, *args, **kwargs):
         pass
+
+
+class TorrentInterface(ABC):
+    @abstractmethod
+    def parse(self, *args, **kwargs):
+        pass
+
+    @abstractmethod
+    async def search(self, *args, **kwargs):
+        pass

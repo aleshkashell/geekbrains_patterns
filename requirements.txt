@@ -1,2 +1,4 @@
 aiogram
 motor
+lxml
+aiohttp
