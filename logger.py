@@ -13,7 +13,7 @@ class Log():
             "warning": logging.WARNING
         }
         try:
-            self.log_level = levels[log_level]
+            self.log_level = levels[log_level.lower()]
         except KeyError:
             self.log_level = logging.DEBUG
         self._init_console_handler()
@@ -21,14 +21,14 @@ class Log():
         self.logger.setLevel(self.log_level)
 
     def _init_console_handler(self):
-        formatter = logging.Formatter("%(asctime)-25s %(filename)-30s %(levelname)-10s %(message)s")
+        formatter = logging.Formatter("%(asctime)-25s %(name)-30s %(levelname)-10s %(message)s")
         console = logging.StreamHandler()
         console.setLevel(self.log_level)
         console.setFormatter(formatter)
         self.logger.addHandler(console)
 
     def _init_file_handler(self):
-        formatter = logging.Formatter("%(asctime)-25s %(filename)-30s %(levelname)-10s %(message)s")
+        formatter = logging.Formatter("%(asctime)-25s %(name)-30s %(levelname)-10s %(message)s")
         fh = logging.handlers.TimedRotatingFileHandler(
             self.path, when='D', interval=1, backupCount=5, encoding='utf-8')
         fh.setLevel(self.log_level)
