@@ -73,12 +73,22 @@ class Rutor(TorrentInterface):
     async def search(self, search_str):
         futures = [self.fetch_url(link) for link in self._generate_links(search_str)]
         self.log.debug(f"Generated links: {'  '.join(self._generate_links(search_str))}")
+        return await self.run_search(futures)
+
+    async def run_search(self, futures):
         done, pending = await asyncio.wait(futures, return_when=asyncio.FIRST_COMPLETED)
         for future in pending:
             future.cancel()
         try:
-            print(f'Done: {done}')
             html_page = done.pop().result()
         except:
             return None
         return self.parse(html_page)
+
+    async def search_keywords_rutor(self, keywords):
+        if type(keywords) is list:
+            keywords = ' '.join(keywords)
+        futures = [self.fetch_url(link) for link in self._generate_links(search_str=keywords, method='search_keyword')]
+        self.log.debug(f"Generated links: "
+                       f"{'  '.join(self._generate_links(search_str=keywords, method='search_keyword'))}")
+        return await self.run_search(futures)
