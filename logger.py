@@ -1,9 +1,10 @@
+import json
 import logging
 import logging.handlers
 
 
-class Log():
-    def __init__(self, name, path=None, log_level='Debug'):
+class Log:
+    def __init__(self, name, path=None, log_level=None):
         self.logger = logging.getLogger(name)
         self.path = path if path else f'logs/{name}.log'
         levels = {
@@ -12,6 +13,13 @@ class Log():
             "error": logging.ERROR,
             "warning": logging.WARNING
         }
+        if not log_level:
+            with open('conf.json') as f:
+                data = json.load(f)
+            try:
+                log_level = data['log_level']
+            except KeyError:
+                log_level = "debug"
         try:
             self.log_level = levels[log_level.lower()]
         except KeyError:

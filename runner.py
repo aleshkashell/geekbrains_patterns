@@ -18,7 +18,7 @@ class Runner(RunnerInterface):
         self.loop = asyncio.get_event_loop()
         self.queue = asyncio.Queue()
         self.bot = TgBot(self.queue)
-        self.log = Log("Debug")
+        self.log = Log(__name__)
 
     async def background_updater(self):
         await asyncio.sleep(5.0)
@@ -41,7 +41,7 @@ class Runner(RunnerInterface):
     def format_films(search_str, films):
         msg = f'По запросу: "{search_str}" найдены следущие раздачи:\n'
         for i in films[:6]:
-            msg += f"{i['date']}  |  {i['size']}  |  {i['name']}\n"
+            msg += f"---\n{i['date']}  |  {i['size']}  |  {i['name']}\n"
         return msg
 
     async def process_messages(self):
