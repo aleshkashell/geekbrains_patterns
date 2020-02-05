@@ -20,6 +20,30 @@ class Runner(RunnerInterface):
         self.bot = TgBot(self.queue)
         self.log = Log("Debug")
 
+    async def background_updater(self):
+        await asyncio.sleep(5.0)
+        self.log.debug(f"Start update after 5 seconds")
+        while True:
+            await asyncio.sleep(10)
+            movies = await self.store.get_movies()
+            self.log.debug(f"Search for {movies}")
+            for movie in movies:
+                self.log.debug(f"Find '{movie['title']}' for users: {movie['watchers']}")
+                result = await self.torr_searcher.search_word(movie['title'])
+                self.log.debug(f"Result: {result}")
+                if result:
+                    message = self.format_films(movie['title'], result)
+                    for watcher in movie['watchers']:
+                        await self.bot.send_message(watcher, message)
+                    await self.store.create_or_update_movie(movie=movie['title'], is_active=False)
+
+    @staticmethod
+    def format_films(search_str, films):
+        msg = f'По запросу: "{search_str}" найдены следущие раздачи:\n'
+        for i in films[:6]:
+            msg += f"{i['date']}  |  {i['size']}  |  {i['name']}\n"
+        return msg
+
     async def process_messages(self):
         while True:
             item = await self.queue.get()
@@ -77,22 +101,6 @@ class Runner(RunnerInterface):
 
     async def search_torrent(self, keywords):
         return await self.torr_searcher.search_word(keywords)
-
-    async def background_updater(self):
-        await asyncio.sleep(5.0)
-        self.log.debug(f"Start update after 5 seconds")
-        while True:
-            await asyncio.sleep(10)
-            movies = await self.store.get_movies()
-            self.log.debug(f"Search for {movies}")
-            for movie in movies:
-                self.log.debug(f"Find '{movie['title']}' for users: {movie['watchers']}")
-                result = await self.torr_searcher.search_word(movie['title'])
-                self.log.debug(f"Result: {result}")
-                if result:
-                    for watcher in movie['watchers']:
-                        await self.bot.send_message(watcher, result[:6])
-                    await self.store.create_or_update_movie(movie=movie['title'], is_active=False)
 
 
 if __name__ == '__main__':
