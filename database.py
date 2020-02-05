@@ -92,7 +92,6 @@ class Movies(DatabaseInterface):
         }
         update_ = {
             "$set": record,
-            "$addToSet": {"watchers": watcher},
             "$currentDate": {
                 "updatedAt": True  # set field updatedAt to current date automagically. Good practice ;)
             },
@@ -102,6 +101,8 @@ class Movies(DatabaseInterface):
             }
 
         }
+        if watcher:
+            update_["$addToSet"] = {"watchers": watcher}
         await self.collection.update_one(filter_, update_, upsert=True)
 
     # def update(self):

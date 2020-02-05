@@ -7,6 +7,9 @@ class Store(StoreInterface):
         self.users = DatabaseFactory.create_database('Users')
         self.movies = DatabaseFactory.create_database('Movies')
 
+    async def create_or_update_movie(self, movie, watcher=None, is_active=True):
+        await self.movies.create_or_update(movie=movie, watcher=watcher, is_active=is_active)
+
     async def create_or_update_user(self, user, is_active=True):
         if is_active:
             await self.users.create_or_update(user)
@@ -25,8 +28,5 @@ class Store(StoreInterface):
     async def get_releases_today(self):
         pass
 
-    async def create_or_update_movie(self, movie, watcher, deactivate=False):
-        if deactivate:
-            await self.movies.deactivate(movie=movie, watcher=watcher)
-        else:
-            await self.movies.create_or_update(movie=movie, watcher=watcher)
+    async def ignore_movie(self, movie, watcher):
+        await self.movies.deactivate(movie=movie, watcher=watcher)
