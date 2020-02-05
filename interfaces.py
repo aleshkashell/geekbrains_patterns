@@ -146,3 +146,7 @@ class TorrentInterface(ABC):
     @abstractmethod
     async def search(self, *args, **kwargs):
         pass
+
+    @abstractmethod
+    async def search_keywords(self, *args, **kwargs):
+        pass

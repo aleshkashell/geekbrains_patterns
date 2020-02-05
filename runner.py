@@ -7,9 +7,6 @@ from torrsearch import TorrSearch
 from logger import Log
 
 
-# logging.basicConfig(level=logging.INFO)
-
-
 class Runner(RunnerInterface):
     def __init__(self):
         super().__init__()
