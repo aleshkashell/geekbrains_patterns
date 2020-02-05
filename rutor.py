@@ -83,9 +83,10 @@ class Rutor(TorrentInterface):
             html_page = done.pop().result()
         except:
             return None
+        # !!! Make run in executor
         return self.parse(html_page)
 
-    async def search_keywords_rutor(self, keywords):
+    async def search_keywords(self, keywords):
         if type(keywords) is list:
             keywords = ' '.join(keywords)
         futures = [self.fetch_url(link) for link in self._generate_links(search_str=keywords, method='search_keyword')]
