@@ -4,8 +4,6 @@ from store import Store
 
 
 class Pagebuilder:
-    html_path = 'wsgi/head.html'
-
     def __init__(self):
         self.template = self._load_template()
         self.types = {
