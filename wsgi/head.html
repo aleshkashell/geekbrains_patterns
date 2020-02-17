@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ Title }}</title>
+    <title>{{ Title|capitalize }}</title>
     <style>
         .rTable {
 		    	display: table;
@@ -36,13 +36,13 @@
     </style>
 </head>
 <body>
-<h1>{{ Title }}</h1>
+<h1>{{ Title|capitalize }}</h1>
 <div>
-        <ul class="menu wrapper">
-                {% for category in ['users', 'movies'] %}
-                        <li><a href="{{ category }}">{{ category }}</a></li>
-                {% endfor %}
-        </ul>
+    <ul class="menu wrapper">
+    {% for category in ['users', 'movies'] %}
+        <li><a href="{{ category }}">{{ category }}</a></li>
+    {% endfor %}
+    </ul>
 </div>
 <div class="rTable">
     <div class="rTableRow rTableHeading">
