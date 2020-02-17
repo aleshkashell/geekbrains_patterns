@@ -17,7 +17,6 @@ class Pagebuilder:
 
     def _body_users(self):
         users = self.loop.run_until_complete(self.store.get_users())
-        print(users)
         result = list()
         for user in users:
             result.append((user['username'], user['createdAt']))
@@ -29,10 +28,6 @@ class Pagebuilder:
         for movie in movies:
             result.append((movie["title"], movie["createdAt"]))
         return result
-
-    # def _build_header(self):
-    #     with open(self.html_path) as f:
-    #         return ''.join(f.readlines())
 
     def _build_body(self, data_type):
         try:

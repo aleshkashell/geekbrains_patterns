@@ -7,8 +7,6 @@ class Application:
         self.page_builder = Pagebuilder()
 
     def __call__(self, environ, start_response, *args, **kwargs):
-        print(environ)
-        print(dir(environ))
         request = environ['PATH_INFO']
         data_type = self.routes.get(request, None)
         if data_type:
@@ -23,7 +21,6 @@ class Application:
 
     def build_page(self, data_type):
         str_data = self.page_builder.build(data_type)
-        print(str_data)
         return str_data.encode('utf8')
 
 
