@@ -44,6 +44,7 @@
     {% endfor %}
     </ul>
 </div>
+{% if body|length > 0 and body[0]|length == 2 %}
 <div class="rTable">
     <div class="rTableRow rTableHeading">
         <div class="rTableHead"><strong>Name</strong></div>
@@ -52,9 +53,10 @@
 {% for name, date in body %}
     <div class="rTableRow">
         <div class="rTableCell">{{ name }}</div>
-        <div class="rTableCell"">{{ date }}</div>
+        <div class="rTableCell">{{ date }}</div>
     </div>
 {% endfor %}
 </div>
+{% endif %}
 </body>
 </html>
