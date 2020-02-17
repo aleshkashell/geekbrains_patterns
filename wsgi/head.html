@@ -3,6 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ Title }}</title>
+    <style>
+        .rTable {
+		    	display: table;
+		    	width: 100%;
+		}
+		.rTableRow {
+		    	display: table-row;
+		}
+		.rTableHeading {
+		    	display: table-header-group;
+		    	background-color: #ddd;
+		}
+		.rTableCell, .rTableHead {
+		    	display: table-cell;
+		    	padding: 3px 10px;
+		    	border: 1px solid #999999;
+		}
+		.rTableHeading {
+		    	display: table-header-group;
+		    	background-color: #ddd;
+		    	font-weight: bold;
+		}
+		.rTableFoot {
+		    	display: table-footer-group;
+		    	font-weight: bold;
+		    	background-color: #ddd;
+		}
+		.rTableBody {
+		    	display: table-row-group;
+		}
+    </style>
 </head>
 <body>
 <h1>{{ Title }}</h1>
@@ -13,8 +44,17 @@
                 {% endfor %}
         </ul>
 </div>
+<div class="rTable">
+    <div class="rTableRow rTableHeading">
+        <div class="rTableHead"><strong>Name</strong></div>
+        <div class="rTableHead"><strong>Register date</strong></div>
+    </div>
 {% for name, date in body %}
-<b>{{name}} {{date}}</b>
+    <div class="rTableRow">
+        <div class="rTableCell">{{ name }}</div>
+        <div class="rTableCell"">{{ date }}</div>
+    </div>
 {% endfor %}
+</div>
 </body>
 </html>
