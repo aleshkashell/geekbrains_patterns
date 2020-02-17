@@ -10,6 +10,9 @@ It requires mongodb on the same host, same port.
 TELEGRAM_API_TOKEN="yout token"
 pip install requirements.txt
 python3 runner.py
+
+# For uwsgi run
+uwsgi uwsgi.ini
 ```
 
 ## What's done
@@ -18,6 +21,7 @@ python3 runner.py
 - [lesson 4](#lesson-4)
 - [lesson 5](#lesson-5)
 - [lesson 6](#lesson-6)
+- [lesson 7](#lesson-7)
 
 ## Lesson 3
 
@@ -59,4 +63,8 @@ python3 runner.py
 Основной конкурент на мой взгляд - postgresql, который так же умеет работать с json форматом.
 Но ввиду более усложненной работой и администрированием базы, считаю ее использование оправданным только при очень высоких нагрузках.
 
+## Lesson 7
 
+- Создан front controller для получения информации от текущих пользователях и активных запросах
+- Добавлени шаблон страницы с использование jinja2
+- Добавлен файл конфигурации ```uwsgi.ini```

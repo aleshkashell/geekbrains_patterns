@@ -2,3 +2,6 @@ aiogram
 motor
 lxml
 aiohttp
+imdbpy
+uwsgi
+jinja2
