@@ -1,4 +1,5 @@
 import asyncio
+import jinja2
 from store import Store
 
 
@@ -6,6 +7,7 @@ class Pagebuilder:
     html_path = 'wsgi/head.html'
 
     def __init__(self):
+        self.template = self._load_template()
         self.types = {
             'users': self._body_users,
             'movies': self._body_movies
@@ -15,20 +17,22 @@ class Pagebuilder:
 
     def _body_users(self):
         users = self.loop.run_until_complete(self.store.get_users())
+        print(users)
         result = list()
-        for i in users:
-            pass
+        for user in users:
+            result.append((user['username'], user['createdAt']))
+        return result
 
     def _body_movies(self):
         movies = self.loop.run_until_complete(self.store.get_movies())
         result = list()
         for movie in movies:
-            result.append(f'<b>{movie["title"]:100}\t{movie["createdAt"]}</b>')
-        return '\n'.join(result)
+            result.append((movie["title"], movie["createdAt"]))
+        return result
 
-    def _build_header(self):
-        with open(self.html_path) as f:
-            return ''.join(f.readlines())
+    # def _build_header(self):
+    #     with open(self.html_path) as f:
+    #         return ''.join(f.readlines())
 
     def _build_body(self, data_type):
         try:
@@ -38,12 +42,17 @@ class Pagebuilder:
         return method()
 
     def build(self, data_type):
-        data = list()
-        data.append(self._build_header())
-        data.append(self._build_body(data_type=data_type))
-        data.append('</body>')
-        data.append('</html>')
-        return data
+        data = {
+            "body": self._build_body(data_type),
+            "Title": data_type
+        }
+        return self.template.render(**data)
 
     def _body_raw(self):
         return f'Incorrect type'
+
+    def _load_template(self):
+        template_loader = jinja2.FileSystemLoader(searchpath="./wsgi")
+        template_env = jinja2.Environment(loader=template_loader)
+        TEMPLATE_FILE = "head.html"
+        return template_env.get_template(TEMPLATE_FILE)

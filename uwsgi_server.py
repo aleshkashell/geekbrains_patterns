@@ -23,11 +23,8 @@ class Application:
 
     def build_page(self, data_type):
         str_data = self.page_builder.build(data_type)
-        byte_data = list()
         print(str_data)
-        for line in str_data:
-            byte_data.append(line.encode('utf8') + b'\n')
-        return byte_data
+        return str_data.encode('utf8')
 
 
 application = Application()
